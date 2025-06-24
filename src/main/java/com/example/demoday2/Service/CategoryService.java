@@ -4,13 +4,12 @@ import com.example.demoday2.Category;
 import com.example.demoday2.DTO.BookAndCategoryRequest;
 import com.example.demoday2.Repository.BookRepository;
 import com.example.demoday2.Repository.CategoryRepository;
-import jakarta.transaction.TransactionScoped;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -23,12 +22,15 @@ public class CategoryService {
 
     @Transactional
     public Boolean saveBookAndCategory(BookAndCategoryRequest request) {
-        Category category = Category.builder()
-                .bookCategory(request.getCategoryBook())
-                .bookDescription(request.getBookDescription())
-                .books(new ArrayList<>())
-                .build();
-        System.out.println("Category:" + category);
+        Optional<Category> optionalCategory = categoryRepository.findByName(request.getCategoryBook());
+
+        Category category = optionalCategory.orElse(
+                Category.builder()
+                        .name(request.getCategoryBook())
+                        .categoryDescription(request.getCategoryBook()) // make this description different later by the api design
+                        .books(new ArrayList<>())
+                        .build()
+        );
 
         Book book = Book.builder()
                 .title(request.getTitle())
@@ -39,6 +41,7 @@ public class CategoryService {
         category.getBooks().add(book);
         book.setCategory(category);
 
+        bookRepository.save(book);
         categoryRepository.save(category);
         return true;
     }

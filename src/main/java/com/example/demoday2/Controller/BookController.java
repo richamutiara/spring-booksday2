@@ -22,7 +22,10 @@ public class BookController {
 
     @GetMapping
     public List<Book> getAllBooks(){
-        return service.getAllBooks();
+        List<Book> books = service.getAllBooks();
+        System.out.println(books);
+
+        return books;
     }
 
     @PostMapping
