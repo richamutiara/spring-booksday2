@@ -1,8 +1,11 @@
 package com.example.demoday2.DTO;
 
+import com.example.demoday2.Book;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor

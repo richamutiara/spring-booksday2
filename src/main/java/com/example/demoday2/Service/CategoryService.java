@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,17 +26,18 @@ public class CategoryService {
         Category category = Category.builder()
                 .bookCategory(request.getCategoryBook())
                 .bookDescription(request.getBookDescription())
+                .books(new ArrayList<>())
                 .build();
-
+        System.out.println("Category:" + category);
 
         Book book = Book.builder()
                 .title(request.getTitle())
                 .author(request.getAuthor())
                 .yearPublished(request.getYearPublished())
                 .build();
-        
+
+        category.getBooks().add(book);
         book.setCategory(category);
-        category.setBook(book);
 
         categoryRepository.save(category);
         return true;
